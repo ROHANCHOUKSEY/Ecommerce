@@ -2,6 +2,7 @@ const { check, validationResult } = require("express-validator");
 const userModel = require("../../Model/UserAuthenticationMode");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const transporter = require("../../Config/ConformationEmail");
 
 exports.UserRegistration = [
   check("firstname")
@@ -56,13 +57,24 @@ exports.UserRegistration = [
       return res.status(400).json({ message: "user is already registered" });
     }
 
-    bcryptjs.hash(password, 12).then(async (hashpassword) => {
+    bcrypt.hash(password, 12).then(async (hashpassword) => {
       const newUser = new userModel({
         firstname,
         lastname,
         email,
         password: hashpassword,
       });
+
+      const mailOption = {
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: `Welcome to our ecommerce website`,
+        text: `Welcome to the website ${email}`,
+      };
+
+      await transporter.sendMail(mailOption);
+
+      console.log("Email send");
 
       await newUser.save();
       res.status(200).json({ message: "User successfully registered" });
@@ -96,4 +108,3 @@ exports.userLogin = async (req, res) => {
   res.cookie("token", token);
   await res.status(200).json({ message: "User login successfully" }, token);
 };
- 
