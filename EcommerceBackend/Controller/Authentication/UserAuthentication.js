@@ -68,8 +68,8 @@ exports.UserRegistration = [
       const mailOption = {
         from: process.env.EMAIL_USER,
         to: email,
-        subject: `Welcome to our ecommerce website`,
-        text: `Welcome to the website ${email}`,
+        subject: `Welcome to Our E-commerce Platform!`,
+        text: `Hi ${firstname},\n\nThank you for registering with us. We're excited to have you onboard.\n\nHappy shopping!\n\nRegards,\nTeam Ecommerce`,
       };
 
       await transporter.sendMail(mailOption);
@@ -81,6 +81,68 @@ exports.UserRegistration = [
     });
   },
 ];
+
+exports.sendVerifyOtp = async (req, res) => {
+  const userID = req.userID; //take userID from token
+
+  const user = await userModel.findById(userID);
+
+  if (!user) {
+    return res.json({ success: "false", message: "user not found" });
+  }
+
+  if (user.isAccountVerified === true) {
+    return res.json({ success: "false", message: "user already verifed" });
+  }
+
+  const otp = String(Math.floor(100000 + Math.random() * 900000));
+
+  const expireOtp = Date.now() + 24 * 60 * 60 * 1000;
+
+  user.verifyOtp = otp;
+  user.verifiedOtpExpireAt = expireOtp;
+
+  await user.save();
+
+  const mailOption = {
+    from: process.env.EMAIL_USER,
+    to: user.email,
+    subject: `Your Email Verification OTP`,
+    text: `Hello ${user.firstname},\n\nYour One-Time Password (OTP) to verify your email is:\n\n${otp}\n\nThis OTP is valid for 24 hours.\n\nIf you did not request this, please ignore this email.\n\nRegards,\nTeam Ecommerce`,
+  };
+
+  await transporter.sendMail(mailOption);
+
+  await res.json({
+    success: true,
+    message: "successfully sent verified token",
+  });
+};
+
+exports.verifyOtp = async (req, res) => {
+  const userID = req.userID;
+  const { otp } = req.body;
+
+  const user = await userModel.findById(userID);
+
+  if (!user) {
+    return res.json({ success: "false", message: "user not found" });
+  }
+
+  if (user.verifyOtp === "" || user.verifyOtp !== otp) {
+    return res.json({ success: "false", message: "otp is not verified" });
+  }
+
+  if (user.verifiedOtpExpireAt < Date.now() + 2 * 60 * 1000) {
+    return res.json({ success: "false", message: "otp is expire" });
+  }
+
+  user.isAccountVerified = true;
+  user.verifiedOtpExpireAt = "";
+
+  await user.save();
+  await res.json({ success: "true", message: "otp verify successfully" });
+};
 
 exports.userLogin = async (req, res) => {
   const { email, password } = req.body;
@@ -107,4 +169,77 @@ exports.userLogin = async (req, res) => {
 
   res.cookie("token", token);
   await res.status(200).json({ message: "User login successfully" }, token);
+};
+
+exports.userForgetPassword = async (req, res) => {
+  const { email } = req.body;
+
+  const user = await userModel.findOne({ email });
+
+  if (!user) {
+    return res.json({ success: "false", message: "user not found" });
+  }
+
+  if (user.email !== email) {
+    return res.json({ success: "false", message: "email do not match" });
+  }
+
+  const resetotp = String(Math.floor(100000 + Math.random() * 900000));
+
+  const resetotpExp = Date.now() + 24 * 60 * 60 * 1000;
+
+  user.resetOtp = resetotp;
+
+  user.resetOtpExpireAt = resetotpExp;
+
+  const mailOption = {
+    from: process.env.EMAIL_USER,
+    to: user.email,
+    subject: `Reset Your Password - OTP Inside`,
+    text: `Hello ${user.firstname},\n\nYou requested a password reset. Please use the following OTP to reset your password:\n\n${resetotp}\n\nThis OTP is valid for 24 hours.\n\nIf you did not request a password reset, please ignore this email.\n\nRegards,\nTeam Ecommerce`,
+  };
+
+  await transporter.sendMail(mailOption);
+
+  await user.save();
+  await res.json({ success: "true", message: "Successfully send reset otp" });
+};
+
+exports.userForgetPasswordVerify = async (req, res) => {
+  const { email, resetotp, newpassword } = req.body;
+
+  const user = await userModel.findOne({ email });
+
+  if (!user || user.email !== email) {
+    return res.json({ success: "false", message: "user not found" });
+  }
+
+  if (user.resetOtp === "" || user.resetOtp !== resetotp) {
+    return res.json({ success: "false", message: "resetotp is not verified" });
+  }
+
+  if (user.resetOtpExpireAt < Date.now()) {
+    return res.json({ success: "false", message: "reset otp is now expired" });
+  }
+
+  const hashedPassword = await bcrypt.hash(newpassword, 12);
+
+  user.password = hashedPassword;
+  user.resetOtp = "";
+  user.resetOtpExpireAt = 0;
+
+  const mailOption = {
+    from: process.env.EMAIL_USER,
+    to: user.email,
+    subject: `Your Password Has Been Successfully Changed`,
+    text: `Hello ${user.firstname},\n\nThis is a confirmation that your account password has been successfully changed on ${new Date().toLocaleString()}.\n\nThank you for using our E-commerce platform!\n\nRegards,\nTeam Ecommerce`,
+  };
+
+ await transporter.sendMail(mailOption);
+
+  await user.save();
+  await res.json({
+    success: "true",
+    message: "Password is successfully change",
+  });
 };
