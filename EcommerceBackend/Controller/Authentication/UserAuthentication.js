@@ -47,7 +47,7 @@ exports.UserRegistration = [
   async (req, res) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
-      return res.status(400).json({ ValidationError: error.array() });
+      return res.status(400).json({ error: error.array() });
     }
 
     const { firstname, lastname, email, password, confirm_password } = req.body;
@@ -65,6 +65,8 @@ exports.UserRegistration = [
         password: hashpassword,
       });
 
+      await newUser.save();
+
       const mailOption = {
         from: process.env.EMAIL_USER,
         to: email,
@@ -74,15 +76,26 @@ exports.UserRegistration = [
 
       await transporter.sendMail(mailOption);
 
-      console.log("Email send");
+      const token = jwt.sign(
+        { userID: newUser._id },
+        process.env.JWT_SECRETKEY,
+        { expiresIn: "7d" }
+      );
 
-      await newUser.save();
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        samesite: process.env.NODE_ENV === "production" ? "none" : "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+
       res.status(200).json({ message: "User successfully registered" });
     });
   },
 ];
 
 exports.sendVerifyOtp = async (req, res) => {
+
   const userID = req.userID; //take userID from token
 
   const user = await userModel.findById(userID);
@@ -115,8 +128,9 @@ exports.sendVerifyOtp = async (req, res) => {
 
   await res.json({
     success: true,
-    message: "successfully sent verified token",
+    message: "successfully sent verified otp",
   });
+
 };
 
 exports.verifyOtp = async (req, res) => {
@@ -137,6 +151,7 @@ exports.verifyOtp = async (req, res) => {
     return res.json({ success: "false", message: "otp is expire" });
   }
 
+  user.verifyOtp = "";
   user.isAccountVerified = true;
   user.verifiedOtpExpireAt = "";
 
@@ -232,10 +247,12 @@ exports.userForgetPasswordVerify = async (req, res) => {
     from: process.env.EMAIL_USER,
     to: user.email,
     subject: `Your Password Has Been Successfully Changed`,
-    text: `Hello ${user.firstname},\n\nThis is a confirmation that your account password has been successfully changed on ${new Date().toLocaleString()}.\n\nThank you for using our E-commerce platform!\n\nRegards,\nTeam Ecommerce`,
+    text: `Hello ${
+      user.firstname
+    },\n\nThis is a confirmation that your account password has been successfully changed on ${new Date().toLocaleString()}.\n\nThank you for using our E-commerce platform!\n\nRegards,\nTeam Ecommerce`,
   };
 
- await transporter.sendMail(mailOption);
+  await transporter.sendMail(mailOption);
 
   await user.save();
   await res.json({
