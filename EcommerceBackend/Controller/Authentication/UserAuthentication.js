@@ -261,7 +261,6 @@ exports.userForgetPasswordVerify = async (req, res) => {
 };
 
 exports.userNewPassword = [
-
   check("newPassword")
     .trim()
     .isLength({ min: 8 })
@@ -274,13 +273,12 @@ exports.userNewPassword = [
     .withMessage("Password must contain at least one special letter"),
 
   async (req, res) => {
-
     const error = validationResult(req);
 
-    if(!error.isEmpty()){
-      return res.status(400).json({success:"false", message:error.array()});
+    if (!error.isEmpty()) {
+      return res.status(400).json({ success: "false", message: error.array() });
     }
-    
+
     const { email, newPassword } = req.body;
 
     console.log("newPassword: ", newPassword);
@@ -314,3 +312,14 @@ exports.userNewPassword = [
       .json({ success: true, message: "Successfully Reset Password" });
   },
 ];
+
+exports.userLogOut = async (req, res) => {
+  try {
+    res.clearCookie("token");
+    res
+      .status(200)
+      .json({ success: "true", message: "User Successfully LogOut" });
+  } catch (error) {
+    res.status(400).json({success:"false", message:"User Not LogOut, !Error"});
+  }
+};

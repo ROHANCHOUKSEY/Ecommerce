@@ -12,6 +12,7 @@ AuthRouter.post("/verifyOtp", userAuth, userAuthentication.verifyOtp)
 AuthRouter.post("/resetPassword", userAuthentication.userForgetPassword);
 AuthRouter.post("/verifyResetOtp", userAuthentication.userForgetPasswordVerify);
 AuthRouter.post("/newPassword", userAuthentication.userNewPassword);
+AuthRouter.post("/userLogout", userAuthentication.userLogOut);
 AuthRouter.get("/profile", verifytoken, (req, res, next) => {
   res.json({ message: `Welcome back! Your email is ${req.user.email}` });
 });
