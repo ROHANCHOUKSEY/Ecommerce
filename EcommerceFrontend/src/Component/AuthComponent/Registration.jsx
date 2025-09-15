@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 
 const Registration = () => {
 
@@ -12,7 +12,6 @@ const Registration = () => {
     });
 
     const [registeredError, setregisteredError] = useState([]);
-
 
     const navigate = useNavigate();
 
@@ -37,12 +36,12 @@ const Registration = () => {
 
             if (!response.ok) {
                 throw data;
-            }   
+            }
 
             //send verification otp
             const sendOtp = await fetch("http://localhost:3002/user/sendotp", {
                 method: "POST",
-                credentials:"include",
+                credentials: "include",
             })
 
             const otpData = await sendOtp.json();
@@ -54,7 +53,7 @@ const Registration = () => {
             await navigate("/verifyOtp");
 
             return data;
-            
+
         } catch (error) {
             if (error.error) {
                 // Validation errors
@@ -88,6 +87,11 @@ const Registration = () => {
                                 <input className='border-2 h-10 md:h-15 border-gray-600 rounded-md md:rounded-lg focus:outline-0 p-3' name="confirm_password" value={userRegistered.confirm_password} onChange={handleUserRegistration} type="password" placeholder='Conform Password' required />
                                 <div className='flex justify-center'>
                                     <button type='submit' className='flex justify-center border-2 border-gray-600 rounded-2xl focus:outline-0 p-3 w-40 cursor-pointer'>Registered</button>
+                                </div>
+                                <div className='text-center'>
+                                    <p>
+                                        <span className='text-blue-500'>Already have an account? </span><NavLink to="/userLogin">Login</NavLink>
+                                    </p>
                                 </div>
                             </div>
                         </form>
