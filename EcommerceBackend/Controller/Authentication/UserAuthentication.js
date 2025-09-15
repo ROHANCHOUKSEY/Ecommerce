@@ -252,43 +252,65 @@ exports.userForgetPasswordVerify = async (req, res) => {
       .status(400)
       .json({ success: "false", message: "reset otp is now expired" });
   }
-  
+
   await user.save();
   await res.json({
     success: "true",
     message: "ResetOtp Verified",
   });
-
 };
 
-exports.userNewPassword = async (req, res) => {
-  const { email, newPassword } = req.body;
+exports.userNewPassword = [
 
-  const user = await userModel.findOne(email);
+  check("newPassword")
+    .trim()
+    .isLength({ min: 8 })
+    .withMessage("Password must be at least 8 character long")
+    .matches(/[a-z]/)
+    .withMessage("Password must contain at least one lowercase letter")
+    .matches(/[A-Z]/)
+    .withMessage("Password must contain at least one uppercase letter")
+    .matches(/[!@#$%^&*?<>:{}|<>]/)
+    .withMessage("Password must contain at least one special letter"),
 
-  if (!user) {
-    res.status(402).json({ success: "false", message: "User not found" });
-  }
+  async (req, res) => {
 
-  const hashedPassword = await bcrypt.hash(newPassword, 12);
+    const error = validationResult(req);
 
-  user.password = hashedPassword;
-  user.resetOtpExpireAt = 0;
+    if(!error.isEmpty()){
+      return res.status(400).json({success:"false", message:error.array()});
+    }
+    
+    const { email, newPassword } = req.body;
 
-  const mailOption = {
-    from: process.env.EMAIL_USER,
-    to: user.email,
-    subject: `Your Password Has Been Successfully Changed`,
-    text: `Hello ${
-      user.firstname
-    },\n\nThis is a confirmation that your account password has been successfully changed on ${new Date().toLocaleString()}.\n\nThank you for using our E-commerce platform!\n\nRegards,\nTeam Ecommerce`,
-  };
+    console.log("newPassword: ", newPassword);
 
-  await transporter.sendMail(mailOption);
+    const user = await userModel.findOne({ email });
 
-  await user.save();
+    if (!user) {
+      res.status(402).json({ success: "false", message: "User not found" });
+    }
 
-  await res
-    .json(200)
-    .json({ success: true, message: "Successfully Reset Password" });
-};
+    const hashedPassword = await bcrypt.hash(newPassword, 12);
+
+    user.password = hashedPassword;
+    user.resetOtpExpireAt = 0;
+
+    const mailOption = {
+      from: process.env.EMAIL_USER,
+      to: user.email,
+      subject: `Your Password Has Been Successfully Changed`,
+      text: `Hello ${
+        user.firstname
+      },\n\nThis is a confirmation that your account password has been successfully changed on ${new Date().toLocaleString()}.\n\nThank you for using our E-commerce platform!\n\nRegards,\nTeam Ecommerce`,
+    };
+
+    await transporter.sendMail(mailOption);
+
+    await user.save();
+
+    await res
+      .status(200)
+      .json({ success: true, message: "Successfully Reset Password" });
+  },
+];
