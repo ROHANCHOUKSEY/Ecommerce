@@ -65,6 +65,9 @@ const UserLogin = () => {
                                 <div className='text-red-500'>
                                     <NavLink to="/resetPassword">Forget Password</NavLink>
                                 </div>
+                                <div className='w-full flex gap-1'>
+                                    <p>Don't have an account?</p><NavLink to="/" className="text-blue-400">Registered</NavLink>
+                                </div>
                             </div>
                         </form>
                     </div>

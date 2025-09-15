@@ -26,7 +26,7 @@ const GetResetOtp = () => {
   const handleSubmitResetOtp = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:3002/user/newPassword", {
+      const response = await fetch("http://localhost:3002/user/verifyResetOtp", {
         method: "POST",
         credentials: "include",
         headers: {
