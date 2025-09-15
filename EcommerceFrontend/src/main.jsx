@@ -28,6 +28,6 @@ createRoot(document.getElementById('root')).render(
   <ContextProvider>
     <StrictMode>
       <RouterProvider router={router} />
-    </StrictMode>,
+    </StrictMode>
   </ContextProvider>
 )
