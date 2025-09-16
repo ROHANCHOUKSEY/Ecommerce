@@ -12,6 +12,7 @@ const UserLogin = () => {
 
     const [loginError, setLoginError] = useState("");
     const [passwordHide, setPasswordHide] = useState(true);
+    const [loading, setLoading] = useState(false);
 
 
     const handleUserLogin = (e) => {
@@ -25,7 +26,7 @@ const UserLogin = () => {
 
     const handleSubmitLogin = async (e) => {
         e.preventDefault();
-
+        setLoading(true);
         try {
             const response = await fetch("http://localhost:3002/user/userLogin", {
                 method: "POST",
@@ -48,6 +49,8 @@ const UserLogin = () => {
             } else {
                 setLoginError("User not login: An unexpected error occurred.");
             }
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -64,7 +67,7 @@ const UserLogin = () => {
 
                 <form onSubmit={handleSubmitLogin} className="space-y-5">
                     <div className='relative flex items-center'>
-                        <Mail className='absolute left-1 text-gray-400'/>
+                        <Mail className='absolute left-1 text-gray-400' />
                         <input
                             className="w-full p-3 pl-[35px] border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             name="email"
@@ -77,7 +80,7 @@ const UserLogin = () => {
                     </div>
 
                     <div className='relative flex items-center'>
-                        <Lock className='absolute left-1 text-gray-400'/>
+                        <Lock className='absolute left-1 text-gray-400' />
                         <input
                             className="w-full p-3 pl-[35px] border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             name="password"
@@ -90,13 +93,20 @@ const UserLogin = () => {
                         {passwordHide ? <Eye className='absolute w-10 right-0 pr-3 cursor-pointer' onClick={handlePasswordHide} /> : <EyeOff className='absolute w-10 right-0 pr-3 cursor-pointer' onClick={handlePasswordHide} />}
                     </div>
 
-
-                    <button
+                    {loading ? (
+                        <span className="flex items-center justify-center bg-blue-600 py-3 rounded-lg text-white">
+                            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Processing....
+                        </span>
+                    ) : <button
                         type="submit"
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-200"
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-200 cursor-pointer"
                     >
                         Login
-                    </button>
+                    </button>}
                 </form>
 
                 <div className="mt-4 text-center">

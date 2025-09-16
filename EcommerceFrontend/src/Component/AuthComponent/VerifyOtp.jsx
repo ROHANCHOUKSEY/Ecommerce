@@ -1,76 +1,111 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const VerifyOtp = () => {
-
   const navigate = useNavigate();
 
-  const [verifyOtp, setVerifyOtp] = useState({
-    otp: "",
-  })
-
-  const [optError, setOtpError] = useState("");
+  const [verifyOtp, setVerifyOtp] = useState({ otp: "" });
+  const [otpError, setOtpError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleVerifyOtp = (e) => {
     const { name, value } = e.target;
-    setVerifyOtp({...verifyOtp ,[name]: value });
-  }
+    setVerifyOtp({ ...verifyOtp, [name]: value });
+  };
 
   const handleSubmitVerifyOtp = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     try {
       const response = await fetch("http://localhost:3002/user/verifyOtp", {
         method: "POST",
         credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-          body: JSON.stringify(verifyOtp)
-      })
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(verifyOtp),
+      });
 
       const data = await response.json();
-
-      if (!response.ok) {
-        throw data;
-      }
+      if (!response.ok) throw data;
 
       navigate("/userLogin");
-
-
       return data;
-
-
     } catch (error) {
       if (error.message) {
         setOtpError(error.message);
       } else {
-        console.log("Another Error During Verify Otp: ", error);
+        setOtpError("An unexpected error occurred. Please try again.");
+        console.log("Error verifying OTP:", error);
       }
+    } finally {
+      setLoading(false);
     }
-
-  }
+  };
 
   return (
-    <>
-      <div className='flex justify-center items-center min-h-screen'>
-        <div className='w-70 h-50 flex flex-col justify-center items-center align-middle border-2 border-gray-500 rounded-md'>
-          <form onSubmit={handleSubmitVerifyOtp}>
-            {<p>{optError}</p>}
-            <div className='w-full flex flex-col justify-center items-center gap-4'>
-              <h1 className='text-center'>VerifyOTP</h1>
-              <div className=''>
-                <input className='border-2 border-gray-400 focus:outline-0' type="text" name='otp' value={verifyOtp.otp} onChange={handleVerifyOtp} placeholder='OTP' required />
-              </div>
-              <button type='submit' className='border-2 border-none bg-green-400 hover:bg-green-500 p-2 rounded-md text-white cursor-pointer'>
-                Send OTP
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </>
-  )
-}
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+      <div className="bg-white rounded-xl shadow-lg max-w-md w-full p-8">
+        <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">
+          OTP Verification
+        </h1>
 
-export default VerifyOtp
+        <p className="text-gray-600 text-center mb-4">
+          Please enter the OTP sent to your email to verify your account.
+        </p>
+
+        {otpError && (
+          <div className="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded text-center">
+            {otpError}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmitVerifyOtp} className="space-y-5">
+          <input
+            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            type="text"
+            name="otp"
+            value={verifyOtp.otp}
+            onChange={handleVerifyOtp}
+            placeholder="Enter OTP"
+            required
+          />
+
+          {loading ? (
+            <span className="flex items-center justify-center bg-blue-600 py-3 rounded-lg text-white">
+              <svg
+                className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              Verifying...
+            </span>
+          ) : (
+            <button
+              type="submit"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-200"
+            >
+              Verify OTP
+            </button>
+          )}
+        </form>
+      </div> 
+    </div>
+  );
+};
+
+export default VerifyOtp;
+  
