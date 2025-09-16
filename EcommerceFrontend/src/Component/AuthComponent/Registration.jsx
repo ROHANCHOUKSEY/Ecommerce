@@ -71,109 +71,111 @@ const Registration = () => {
 
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-            <div className="bg-white rounded-xl shadow-xl max-w-lg w-full p-8">
-                <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">Create Your Account</h1>
+        <>
+            <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+                <div className="bg-white rounded-xl shadow-xl max-w-lg w-full p-8">
+                    <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">Create Your Account</h1>
 
-                {registeredError.length > 0 &&
-                    <div className="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-                        {registeredError.map((error, idx) => (
-                            <p key={idx} className="text-sm">{error}</p>
-                        ))}
-                    </div>
-                }
+                    {registeredError.length > 0 &&
+                        <div className="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                            {registeredError.map((error, idx) => (
+                                <p key={idx} className="text-sm">{error}</p>
+                            ))}
+                        </div>
+                    }
 
-                <form onSubmit={handle_SubmitRegistration} className="space-y-5">
-                    <div className="flex flex-col md:flex-row gap-3">
+                    <form onSubmit={handle_SubmitRegistration} className="space-y-5">
+                        <div className="flex flex-col md:flex-row gap-3">
+                            <div className='relative flex items-center'>
+                                <User className='absolute left-1 text-gray-400' />
+                                <input
+                                    className="w-full flex-1 p-3 pl-[35px] border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    name="firstname"
+                                    value={userRegistered.firstname}
+                                    onChange={handleUserRegistration}
+                                    type="text"
+                                    placeholder="First Name"
+                                    required
+                                />
+                            </div>
+
+                            <div className='relative flex items-center'>
+                                <User className='absolute left-1 text-gray-400' />
+                                <input
+                                    className="w-full flex-1 p-3 pl-[35px] border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    name="lastname"
+                                    value={userRegistered.lastname}
+                                    onChange={handleUserRegistration}
+                                    type="text"
+                                    placeholder="Last Name"
+                                    required
+                                />
+                            </div>
+
+                        </div>
+
                         <div className='relative flex items-center'>
-                            <User className='absolute left-1 text-gray-400'/>
+                            <Mail className='absolute left-1 text-gray-400' />
                             <input
-                                className="w-full flex-1 p-3 pl-[35px] border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                name="firstname"
-                                value={userRegistered.firstname}
+                                className="w-full p-3 pl-[35px] border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                name="email"
+                                value={userRegistered.email}
                                 onChange={handleUserRegistration}
-                                type="text"
-                                placeholder="First Name"
+                                type="email"
+                                placeholder="Email Address"
                                 required
                             />
                         </div>
 
                         <div className='relative flex items-center'>
-                            <User className='absolute left-1 text-gray-400' />
+                            <Lock className='absolute left-1 text-gray-400' />
                             <input
-                                className="w-full flex-1 p-3 pl-[35px] border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                name="lastname"
-                                value={userRegistered.lastname}
+                                className="w-full p-3 pl-[35px] border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                name="password"
+                                value={userRegistered.password}
                                 onChange={handleUserRegistration}
-                                type="text"
-                                placeholder="Last Name"
+                                type={showPassword ? "password" : "text"}
+                                placeholder="Password"
                                 required
                             />
+                            {showPassword ? <Eye className='absolute w-10  right-0 pr-3 flex items-center cursor-pointer' onClick={handleShowPassword} /> : <EyeOff className='absolute w-10 inset-y-3 right-0 pr-3 flex items-center cursor-pointer' onClick={handleShowPassword} />}
                         </div>
 
-                    </div>
+                        <div className='relative flex items-center'>
+                            <Lock className='absolute left-1 text-gray-400' />
+                            <input
+                                className="w-full p-3 pl-[35px] border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                name="confirm_password"
+                                value={userRegistered.confirm_password}
+                                onChange={handleUserRegistration}
+                                type={showConfirmPassword ? "password" : "text"}
+                                placeholder="Confirm Password"
+                                required
+                            />
+                            {showConfirmPassword ? <Eye className='absolute w-10 right-0 pr-3 flex items-center cursor-pointer' onClick={handleShowConfirmPassword} /> : <EyeOff className='absolute w-10 right-0 inset-y-3 pr-3 flex items-center cursor-pointer' onClick={handleShowConfirmPassword} />}
+                        </div>
 
-                    <div className='relative flex items-center'>
-                        <Mail className='absolute left-1 text-gray-400' />
-                        <input
-                            className="w-full p-3 pl-[35px] border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            name="email"
-                            value={userRegistered.email}
-                            onChange={handleUserRegistration}
-                            type="email"
-                            placeholder="Email Address"
-                            required
-                        />
-                    </div>
+                        <button
+                            type="submit"
+                            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-200"
+                        >
+                            Register
+                        </button>
+                    </form>
 
-                    <div className='relative flex items-center'>
-                        <Lock className='absolute left-1 text-gray-400'/>
-                        <input
-                            className="w-full p-3 pl-[35px] border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            name="password"
-                            value={userRegistered.password}
-                            onChange={handleUserRegistration}
-                            type={showPassword ? "password" : "text"}
-                            placeholder="Password"
-                            required
-                        />
-                        {showPassword ? <Eye className='absolute w-10  right-0 pr-3 flex items-center cursor-pointer' onClick={handleShowPassword} /> : <EyeOff className='absolute w-10 inset-y-3 right-0 pr-3 flex items-center cursor-pointer' onClick={handleShowPassword} />}
-                    </div>
+                    <p className="text-center text-gray-600 mt-6">
+                        Already have an account?{' '}
+                        <NavLink to="/userLogin" className="text-blue-600 hover:underline">
+                            Login Now
+                        </NavLink>
+                    </p>
 
-                    <div className='relative flex items-center'>
-                        <Lock className='absolute left-1 text-gray-400'/>
-                        <input
-                            className="w-full p-3 pl-[35px] border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            name="confirm_password"
-                            value={userRegistered.confirm_password}
-                            onChange={handleUserRegistration}
-                            type={showConfirmPassword ? "password" : "text"}
-                            placeholder="Confirm Password"
-                            required
-                        />
-                        {showConfirmPassword ? <Eye className='absolute w-10 right-0 pr-3 flex items-center cursor-pointer' onClick={handleShowConfirmPassword} /> : <EyeOff className='absolute w-10 right-0 inset-y-3 pr-3 flex items-center cursor-pointer' onClick={handleShowConfirmPassword} />}
-                    </div>
-
-                    <button
-                        type="submit"
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-200"
-                    >
-                        Register
-                    </button>
-                </form>
-
-                <p className="text-center text-gray-600 mt-6">
-                    Already have an account?{' '}
-                    <NavLink to="/userLogin" className="text-blue-600 hover:underline">
-                        Login Now
-                    </NavLink>
-                </p>
-
-                <p className="text-center text-gray-400 text-sm mt-4">
-                    By registering, you agree to our <span className="text-blue-500 cursor-pointer">Terms of Service</span> and <span className="text-blue-500 cursor-pointer">Privacy Policy</span>.
-                </p>
+                    <p className="text-center text-gray-400 text-sm mt-4">
+                        By registering, you agree to our <span className="text-blue-500 cursor-pointer">Terms of Service</span> and <span className="text-blue-500 cursor-pointer">Privacy Policy</span>.
+                    </p>
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 
