@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import React, { useState } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
 
 const Registration = () => {
 
@@ -13,16 +14,18 @@ const Registration = () => {
 
     const [registeredError, setregisteredError] = useState([]);
 
+    const [showPassword, setShowPassoword] = useState(true);
+    const [showConfirmPassword, setShowConfirmPassoword] = useState(true);
+
     const navigate = useNavigate();
 
     const handleUserRegistration = (e) => {
         const { name, value } = e.target;
-        setUserRegistered({ ...userRegistered, [name]: value })
-    }
+        setUserRegistered({ ...userRegistered, [name]: value });
+    };
 
     const handle_SubmitRegistration = async (e) => {
-        e.preventDefault();  // Prevent page refresh
-
+        e.preventDefault();
         try {
             const response = await fetch("http://localhost:3002/user/userRegistration", {
                 method: "POST",
@@ -32,74 +35,146 @@ const Registration = () => {
                 },
                 body: JSON.stringify({ ...userRegistered })
             });
+
             const data = await response.json();
+            if (!response.ok) throw data;
 
-            if (!response.ok) {
-                throw data;
-            }
-
-            //send verification otp
             const sendOtp = await fetch("http://localhost:3002/user/sendotp", {
                 method: "POST",
                 credentials: "include",
-            })
+            });
 
             const otpData = await sendOtp.json();
-
-            if (!sendOtp.ok) {
-                throw otpData
-            }
+            if (!sendOtp.ok) throw otpData;
 
             await navigate("/verifyOtp");
 
             return data;
-
         } catch (error) {
             if (error.error) {
-                // Validation errors
                 setregisteredError(error.error.map(err => err.msg));
             } else if (error.message) {
-                // Other errors like "user is already registered"
                 setregisteredError([error.message]);
             } else {
                 setregisteredError(["An unexpected error occurred"]);
             }
         }
+    };
+
+    const handleShowPassword = () => {
+        setShowPassoword(!showPassword);
     }
 
-    return (
-        <>
-            <div className='md:min-h-screen flex justify-center items-center m-5'>
-                <div className='w-full md:w-100 border-2 border-gray-700 rounded-2xl'>
-                    <div className='flex flex-col justify-center mt-5'>
-                        {registeredError.map((error) => (
-                            <div className='flex w-100'>
-                                <p className='font-light text-red-500 text-center m-0'>{error}</p>
-                            </div>
-                        ))}
-                        <h1 className='text-2xl font-bold text-center'>𝖱𝖤𝖦𝖨𝖲𝖳𝖱𝖠𝖳𝖨𝖮𝖭</h1>
-                        <form onSubmit={handle_SubmitRegistration}>
-                            <div className='flex flex-col justify-center px-4 md:px-10 py-4 md:py-6 gap-6'>
-                                <input className='border-2 h-10 md:h-15 border-gray-600 rounded-md md:rounded-lg focus:outline-0 p-3' name="firstname" value={userRegistered.firstname} onChange={handleUserRegistration} type="text" placeholder='First Name' required />
-                                <input className='border-2 h-10 md:h-15 border-gray-600 rounded-md md:rounded-lg focus:outline-0 p-3' name="lastname" value={userRegistered.lastname} onChange={handleUserRegistration} type="text" placeholder='Last Name' required />
-                                <input className='border-2 h-10 md:h-15 border-gray-600 rounded-md md:rounded-lg focus:outline-0 p-3' name="email" value={userRegistered.email} onChange={handleUserRegistration} type="email" placeholder='Email' required />
-                                <input className='border-2 h-10 md:h-15 border-gray-600 rounded-md md:rounded-lg focus:outline-0 p-3' name="password" value={userRegistered.password} onChange={handleUserRegistration} type="password" placeholder='Password' required />
-                                <input className='border-2 h-10 md:h-15 border-gray-600 rounded-md md:rounded-lg focus:outline-0 p-3' name="confirm_password" value={userRegistered.confirm_password} onChange={handleUserRegistration} type="password" placeholder='Conform Password' required />
-                                <div className='flex justify-center'>
-                                    <button type='submit' className='flex justify-center border-2 border-gray-600 rounded-2xl focus:outline-0 p-3 w-40 cursor-pointer'>Registered</button>
-                                </div>
-                                <div className='text-center'>
-                                    <p>
-                                        <span className='text-blue-500'>Already have an account? </span><NavLink to="/userLogin">Login</NavLink>
-                                    </p>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </>
-    )
-}
+    const handleShowConfirmPassword = () => {
+        setShowConfirmPassoword(!showConfirmPassword);
+    }
 
-export default Registration 
+
+    return (
+        <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+            <div className="bg-white rounded-xl shadow-xl max-w-lg w-full p-8">
+                <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">Create Your Account</h1>
+
+                {registeredError.length > 0 &&
+                    <div className="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                        {registeredError.map((error, idx) => (
+                            <p key={idx} className="text-sm">{error}</p>
+                        ))}
+                    </div>
+                }
+
+                <form onSubmit={handle_SubmitRegistration} className="space-y-5">
+                    <div className="flex flex-col md:flex-row gap-3">
+                        <div className='relative flex items-center'>
+                            <User className='absolute left-1 text-gray-400'/>
+                            <input
+                                className="w-full flex-1 p-3 pl-[35px] border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                name="firstname"
+                                value={userRegistered.firstname}
+                                onChange={handleUserRegistration}
+                                type="text"
+                                placeholder="First Name"
+                                required
+                            />
+                        </div>
+
+                        <div className='relative flex items-center'>
+                            <User className='absolute left-1 text-gray-400' />
+                            <input
+                                className="w-full flex-1 p-3 pl-[35px] border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                name="lastname"
+                                value={userRegistered.lastname}
+                                onChange={handleUserRegistration}
+                                type="text"
+                                placeholder="Last Name"
+                                required
+                            />
+                        </div>
+
+                    </div>
+
+                    <div className='relative flex items-center'>
+                        <Mail className='absolute left-1 text-gray-400' />
+                        <input
+                            className="w-full p-3 pl-[35px] border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            name="email"
+                            value={userRegistered.email}
+                            onChange={handleUserRegistration}
+                            type="email"
+                            placeholder="Email Address"
+                            required
+                        />
+                    </div>
+
+                    <div className='relative flex items-center'>
+                        <Lock className='absolute left-1 text-gray-400'/>
+                        <input
+                            className="w-full p-3 pl-[35px] border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            name="password"
+                            value={userRegistered.password}
+                            onChange={handleUserRegistration}
+                            type={showPassword ? "password" : "text"}
+                            placeholder="Password"
+                            required
+                        />
+                        {showPassword ? <Eye className='absolute w-10  right-0 pr-3 flex items-center cursor-pointer' onClick={handleShowPassword} /> : <EyeOff className='absolute w-10 inset-y-3 right-0 pr-3 flex items-center cursor-pointer' onClick={handleShowPassword} />}
+                    </div>
+
+                    <div className='relative flex items-center'>
+                        <Lock className='absolute left-1 text-gray-400'/>
+                        <input
+                            className="w-full p-3 pl-[35px] border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            name="confirm_password"
+                            value={userRegistered.confirm_password}
+                            onChange={handleUserRegistration}
+                            type={showConfirmPassword ? "password" : "text"}
+                            placeholder="Confirm Password"
+                            required
+                        />
+                        {showConfirmPassword ? <Eye className='absolute w-10 right-0 pr-3 flex items-center cursor-pointer' onClick={handleShowConfirmPassword} /> : <EyeOff className='absolute w-10 right-0 inset-y-3 pr-3 flex items-center cursor-pointer' onClick={handleShowConfirmPassword} />}
+                    </div>
+
+                    <button
+                        type="submit"
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-200"
+                    >
+                        Register
+                    </button>
+                </form>
+
+                <p className="text-center text-gray-600 mt-6">
+                    Already have an account?{' '}
+                    <NavLink to="/userLogin" className="text-blue-600 hover:underline">
+                        Login Now
+                    </NavLink>
+                </p>
+
+                <p className="text-center text-gray-400 text-sm mt-4">
+                    By registering, you agree to our <span className="text-blue-500 cursor-pointer">Terms of Service</span> and <span className="text-blue-500 cursor-pointer">Privacy Policy</span>.
+                </p>
+            </div>
+        </div>
+    );
+};
+
+export default Registration;
