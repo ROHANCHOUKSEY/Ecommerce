@@ -141,7 +141,7 @@ const Registration = () => {
                                 placeholder="Password"
                                 required
                             />
-                            {showPassword ? <Eye className='absolute w-10  right-0 pr-3 flex items-center cursor-pointer' onClick={handleShowPassword} /> : <EyeOff className='absolute w-10 inset-y-3 right-0 pr-3 flex items-center cursor-pointer' onClick={handleShowPassword} />}
+                            {showPassword ? <Eye className='absolute w-10  right-0 pr-3 flex items-center cursor-pointer text-gray-500' onClick={handleShowPassword} /> : <EyeOff className='absolute w-10 inset-y-3 right-0 pr-3 flex items-center cursor-pointer text-gray-500' onClick={handleShowPassword} />}
                         </div>
 
                         <div className='relative flex items-center'>
@@ -154,8 +154,8 @@ const Registration = () => {
                                 type={showConfirmPassword ? "password" : "text"}
                                 placeholder="Confirm Password"
                                 required
-                            />
-                            {showConfirmPassword ? <Eye className='absolute w-10 right-0 pr-3 flex items-center cursor-pointer' onClick={handleShowConfirmPassword} /> : <EyeOff className='absolute w-10 right-0 inset-y-3 pr-3 flex items-center cursor-pointer' onClick={handleShowConfirmPassword} />}
+                            /> 
+                            {showConfirmPassword ? <Eye className='absolute w-10 right-0 pr-3 flex items-center cursor-pointer text-gray-500' onClick={handleShowConfirmPassword} /> : <EyeOff className='absolute w-10 right-0 inset-y-3 pr-3 flex items-center cursor-pointer text-gray-500' onClick={handleShowConfirmPassword} />}
                         </div>
                         {loading ? (<span className="flex items-center justify-center bg-blue-600 py-3 rounded-lg text-white">
                             <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

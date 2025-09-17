@@ -82,7 +82,7 @@ const NewPassword = () => {
                             placeholder="New Password"
                             required
                         />
-                        {passwordHide ? <Eye className='w-10 absolute right-0' onClick={handleHidePassword} /> : <EyeOff className='w-10 absolute right-0' onClick={handleHidePassword} />}
+                        {passwordHide ? <Eye className='w-10 absolute right-0 text-gray-500' onClick={handleHidePassword} /> : <EyeOff className='w-10 absolute right-0 text-gray-500' onClick={handleHidePassword} />}
                     </div>
 
                     {loading  ? (<span className="flex items-center justify-center bg-blue-600 py-3 rounded-lg text-white">

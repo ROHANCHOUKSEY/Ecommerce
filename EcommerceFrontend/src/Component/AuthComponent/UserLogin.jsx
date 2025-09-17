@@ -90,7 +90,7 @@ const UserLogin = () => {
                             placeholder="Password"
                             required
                         />
-                        {passwordHide ? <Eye className='absolute w-10 right-0 pr-3 cursor-pointer' onClick={handlePasswordHide} /> : <EyeOff className='absolute w-10 right-0 pr-3 cursor-pointer' onClick={handlePasswordHide} />}
+                        {passwordHide ? <Eye className='absolute w-10 right-0 pr-3 cursor-pointer text-gray-500' onClick={handlePasswordHide} /> : <EyeOff className='absolute w-10 right-0 pr-3 cursor-pointer text-gray-500' onClick={handlePasswordHide} />}
                     </div>
 
                     {loading ? (
