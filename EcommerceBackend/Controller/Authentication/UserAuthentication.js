@@ -156,6 +156,7 @@ exports.verifyOtp = async (req, res) => {
 
   user.isAccountVerified = true;
   user.verifiedOtpExpireAt = "";
+  user.verifyOtp = "";
 
   await user.save();
   await res.json({ success: "true", message: "otp verify successfully" });
@@ -293,6 +294,7 @@ exports.userNewPassword = [
 
     user.password = hashedPassword;
     user.resetOtpExpireAt = 0;
+    user.resetOtp = "";
 
     const mailOption = {
       from: process.env.EMAIL_USER,
@@ -320,6 +322,8 @@ exports.userLogOut = async (req, res) => {
       .status(200)
       .json({ success: "true", message: "User Successfully LogOut" });
   } catch (error) {
-    res.status(400).json({success:"false", message:"User Not LogOut, !Error"});
+    res
+      .status(400)
+      .json({ success: "false", message: "User Not LogOut, !Error" });
   }
 };
