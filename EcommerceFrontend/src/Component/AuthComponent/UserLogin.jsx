@@ -1,8 +1,10 @@
 import { Eye, EyeOff, Lock, Mail } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { AppContext } from '../../Context/ContextProvider';
 
 const UserLogin = () => {
+
     const navigate = useNavigate();
 
     const [userLogin, setUserLogin] = useState({
@@ -10,6 +12,7 @@ const UserLogin = () => {
         password: "",
     });
 
+    const{setIsLoggined} = useContext(AppContext);
     const [loginError, setLoginError] = useState("");
     const [passwordHide, setPasswordHide] = useState(true);
     const [loading, setLoading] = useState(false);
@@ -40,7 +43,8 @@ const UserLogin = () => {
             const data = await response.json();
 
             if (!response.ok) throw data;
-
+            
+            setIsLoggined(true);
             navigate("/homepage");
             return data;
         } catch (error) {

@@ -13,7 +13,7 @@ import ContextProvider from './Context/ContextProvider.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route>
+    <Route path='/' element={<App/>}>
       <Route path='/' element={<Registration />} />
       <Route path='verifyOtp' element={<VerifyOtp />} />
       <Route path='userLogin' element={<UserLogin />} />
