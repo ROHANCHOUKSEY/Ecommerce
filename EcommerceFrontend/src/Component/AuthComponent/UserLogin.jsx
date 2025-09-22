@@ -1,7 +1,7 @@
 import { Eye, EyeOff, Lock, Mail } from 'lucide-react';
 import React, { useContext, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { AppContext } from '../../Context/ContextProvider';
+import { AppContext } from '../../Context/AppContext';
 
 const UserLogin = () => {
 

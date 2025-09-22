@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
-import { AppContext } from '../../Context/ContextProvider';
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Lock } from 'lucide-react';
+import { AppContext } from '../../Context/AppContext';
 
 const NewPassword = () => {
     const { resetEmail } = useContext(AppContext);

@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import NewPassword from './NewPassword';
-import { AppContext } from '../../Context/ContextProvider';
+import { AppContext } from '../../Context/AppContext';
 
 const GetResetOtp = () => {
   const { resetEmail } = useContext(AppContext);

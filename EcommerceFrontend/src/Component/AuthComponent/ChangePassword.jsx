@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
-import { AppContext } from '../../Context/ContextProvider';
 import GetResetOtp from './GetResetOtp';
 import { Mail } from "lucide-react";
+import { AppContext } from '../../Context/AppContext';
 
 const ChangePassword = () => {
   const [forgetPassword, setForgetPassword] = useState({ email: "" });
