@@ -45,7 +45,7 @@ const UserLogin = () => {
             if (!response.ok) throw data;
             
             setIsLoggined(true);
-            navigate("/homepage");
+            navigate("/");
             return data;
         } catch (error) {
             if (error.message) {
@@ -122,7 +122,7 @@ const UserLogin = () => {
                 <div className="mt-6 text-center text-gray-600">
                     <p>
                         Don’t have an account?{' '}
-                        <NavLink to="/" className="text-blue-500 hover:underline">
+                        <NavLink to="/registration" className="text-blue-500 hover:underline">
                             Register Now
                         </NavLink>
                     </p>
