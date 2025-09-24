@@ -11,6 +11,7 @@ import ChangePassword from './Component/AuthComponent/ChangePassword.jsx'
 // import GetResetOtp from './Component/AuthComponent/GetResetOtp.jsx'
 import ContextProvider from './Context/ContextProvider.jsx'
 import Mens from "./Component/CategoryComponent/Cloths/Mens.jsx";
+import Kids from "./Component/CategoryComponent/Cloths/Kids.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -20,6 +21,7 @@ const router = createBrowserRouter(
       <Route path='verifyOtp' element={<VerifyOtp />} />
       <Route path='userLogin' element={<UserLogin />} />
       <Route path='resetPassword' element={<ChangePassword />} />
+      <Route path='kids' element={<Kids />} />
       <Route path='mens' element={<Mens />} />
     </Route>
   )
