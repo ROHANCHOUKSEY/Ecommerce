@@ -3,22 +3,26 @@ const kidCloths = require("../../Model/KidsModel/KidCloth");
 exports.kidsCloth = async (req, res) => {
   try {
     const {
-      // image,
+      image,
       type,
       companyName,
       cardDescription,
+      price,
       detailsDescription,
+      color,
       gender,
       size,
       rating,
     } = req.body;
 
     const newKidCloth = new kidCloths({
-      // image, 
+      image, 
       type, 
       companyName,
       cardDescription,
+      price,
       detailsDescription,
+      color,
       gender,
       size,
       rating,

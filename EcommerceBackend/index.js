@@ -33,7 +33,7 @@ const storage = new CloudinaryStorage({
     folder: "products",
     allowed_formats: ["jpg", "jpeg", "png"],
   },
-});
+}); 
 
 const upload = multer({storage});
 

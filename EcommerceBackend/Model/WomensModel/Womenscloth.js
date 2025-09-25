@@ -5,11 +5,38 @@ const womensCloth = mongoose.Schema({
   type: { type: String, required: true },
   companyName: { type: String, required: true },
   cardDescription: { type: String, required: true },
+  price: { type: Number, require: true },
   detailsDescription: { type: String, required: true },
-  gender: { 
-    type: String, 
-    enum: ["Men", "Women", "Kids"], 
-    required: true 
+  color: {
+    type: String,
+    enum: [
+      "Black",
+      "White",
+      "Gray",
+      "Navy",
+      "Blue",
+      "Sky Blue",
+      "Red",
+      "Maroon",
+      "Pink", 
+      "Purple",
+      "Green",
+      "Olive",
+      "Yellow",
+      "Orange",
+      "Brown",
+      "Beige",
+      "Cream",
+      "Khaki",
+      "Gold",
+      "Silver",
+    ],
+    // required: true,
+  },
+  gender: {
+    type: String,
+    enum: ["Men", "Women", "Kids"],
+    required: true,
   },
   size: {
     type: String,
@@ -18,6 +45,5 @@ const womensCloth = mongoose.Schema({
   },
   rating: { type: Number, required: true },
 });
-
 
 module.exports = mongoose.model("womensCloth", womensCloth);
