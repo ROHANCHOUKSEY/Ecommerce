@@ -33,7 +33,7 @@ const womensFootwear = mongoose.Schema({
     ],
     // required: true,
   },
-  gender: {
+  category: {
     type: String,
     enum: ["Men", "Women", "Kids"],
     required: true,

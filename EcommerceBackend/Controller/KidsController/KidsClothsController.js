@@ -1,4 +1,4 @@
-const kidCloths = require("../../Model/KidsModel/KidCloth");
+const kidClothModel = require("../../Model/KidsModel/KidCloth");
 
 exports.kidsCloth = async (req, res) => {
   try {
@@ -10,12 +10,12 @@ exports.kidsCloth = async (req, res) => {
       price,
       detailsDescription,
       color,
-      gender,
+      category,
       size,
       rating,
     } = req.body;
 
-    const newKidCloth = new kidCloths({
+    const newKidCloth = new kidClothModel({
       image, 
       type, 
       companyName,
@@ -23,7 +23,7 @@ exports.kidsCloth = async (req, res) => {
       price,
       detailsDescription,
       color,
-      gender,
+      category,
       size,
       rating,
     });
@@ -31,24 +31,24 @@ exports.kidsCloth = async (req, res) => {
     await newKidCloth.save();
     res
       .status(200)
-      .json({ success: true, message: "newKidsCloth successfully save" });
+      .json({ success: true, message: "newKidCloth save successfully" });
   } catch (error) {
     console.log(error);
     res.status(400).json({
       success: false,
-      message: `newKidsCloth successfully not save, ${error}`,
+      message: `newKidCloth successfully not save, ${error}`,
     });
   }
 };
 
 exports.getkidsCloth = async (req, res) => {
   try {
-    const getkidsCloth = await kidCloths.find(req.body);
+    const getkidsCloth = await kidClothModel.find(req.body);
     await res.status(200).json(getkidsCloth);
   } catch (error) {
-    console.log("Not get kidsCloth: ", error);
+    console.log("Not get kidCloth: ", error);
     await res
       .status(400)
-      .json({ success: false, message: `Not get kidsCloth ${error}`});
+      .json({ success: false, message: `Not get kidCloth ${error}`});
   }
 };

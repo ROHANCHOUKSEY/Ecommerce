@@ -9,6 +9,9 @@ const cloudinary = require("cloudinary").v2;
 const {CloudinaryStorage} = require("multer-storage-cloudinary");
 const authRouter = require("./Router/AuthenticationRouter");
 const KidRouter = require("./Router/KidsRouter/Kidsrouter");
+const MenRouter = require("./Router/MensRouter/Mensrouter");
+const WomenRouter = require("./Router/WomensRouter/Womensrouter");
+
 
 app.use(cookieParser());
 app.use(express.json());
@@ -39,6 +42,8 @@ const upload = multer({storage});
 
 app.use("/user", authRouter);
 app.use("/kidsCollection", KidRouter);
+app.use("/MensCollection", MenRouter);
+app.use("/WomensCollection", WomenRouter);
 
 mongoose
   .connect(process.env.DB_PATH)

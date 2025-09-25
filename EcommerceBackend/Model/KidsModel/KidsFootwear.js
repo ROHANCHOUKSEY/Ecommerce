@@ -29,11 +29,11 @@ const kidsFootwear = mongoose.Schema({
       "Cream",
       "Khaki",
       "Gold",
-      "Silver",
+      "Silver", 
     ],
     // required: true,
   },
-  gender: {
+  category: {
     type: String,
     enum: ["Men", "Women", "Kids"],
     required: true,

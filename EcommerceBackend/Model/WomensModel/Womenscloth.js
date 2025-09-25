@@ -13,8 +13,8 @@ const womensCloth = mongoose.Schema({
       "Black",
       "White",
       "Gray",
-      "Navy",
-      "Blue",
+      "Navy", 
+      "Blue", 
       "Sky Blue",
       "Red",
       "Maroon",
@@ -33,7 +33,7 @@ const womensCloth = mongoose.Schema({
     ],
     // required: true,
   },
-  gender: {
+  category: {
     type: String,
     enum: ["Men", "Women", "Kids"],
     required: true,

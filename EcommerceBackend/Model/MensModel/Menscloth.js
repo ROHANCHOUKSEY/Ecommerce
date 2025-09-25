@@ -33,7 +33,7 @@ const mensCloth = mongoose.Schema({
     ],
     // required: true,
   },
-  gender: {
+  category: {
     type: String,
     enum: ["Men", "Women", "Kids"],
     required: true,
@@ -47,3 +47,4 @@ const mensCloth = mongoose.Schema({
 });
 
 module.exports = mongoose.model("mensCloth", mensCloth);
+ 
