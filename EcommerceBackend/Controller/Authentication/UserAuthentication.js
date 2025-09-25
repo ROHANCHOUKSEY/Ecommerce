@@ -1,7 +1,7 @@
 const { check, validationResult } = require("express-validator");
 const userModel = require("../../Model/UserAuthenticationMode");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken"); 
 const transporter = require("../../Config/ConformationEmail");
 
 exports.UserRegistration = [
