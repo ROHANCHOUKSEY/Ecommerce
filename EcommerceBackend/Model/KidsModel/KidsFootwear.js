@@ -4,7 +4,7 @@ const kidsFootwear = mongoose.Schema({
   img: [{ type: String }],
   type: { type: String },
   companyName: { type: String },
-  cardDescription: { type: String },
+  product_name: { type: String },
   price: { type: Number, require: true },
   detailsDescription: { type: String },
   color: {
@@ -33,7 +33,7 @@ const kidsFootwear = mongoose.Schema({
     ],
     // required: true,
   },
-  category: {
+  product_category: {
     type: String,
     enum: ["Men", "Women", "Kids"],
     required: true,
