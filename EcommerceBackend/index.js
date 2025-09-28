@@ -11,7 +11,8 @@ const authRouter = require("./Router/AuthenticationRouter");
 const KidRouter = require("./Router/KidsRouter/Kidsrouter");
 const MenRouter = require("./Router/MensRouter/Mensrouter");
 const WomenRouter = require("./Router/WomensRouter/Womensrouter");
-
+const ImgUploadRouter = require("./Router/ImageuploadRouter");
+const AdminRouter = require("./Router/AdminRouter/Adminrouter");
 
 app.use(cookieParser());
 app.use(express.json());
@@ -44,6 +45,8 @@ app.use("/user", authRouter);
 app.use("/kidsCollection", KidRouter);
 app.use("/MensCollection", MenRouter);
 app.use("/WomensCollection", WomenRouter);
+app.use("/admin", AdminRouter);
+app.use(ImgUploadRouter);
 
 mongoose
   .connect(process.env.DB_PATH)

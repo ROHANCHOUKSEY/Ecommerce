@@ -115,7 +115,7 @@ exports.sendVerifyOtp = async (req, res) => {
   user.verifiedOtpExpireAt = expireOtp;
 
   await user.save();
-
+ 
   const mailOption = {
     from: process.env.EMAIL_USER,
     to: user.email,
@@ -280,7 +280,7 @@ exports.userNewPassword = [
       return res.status(400).json({ success: "false", message: error.array() });
     }
 
-    const { email, newPassword } = req.body;
+    const { email, newPassword } = req.body; 
 
     console.log("newPassword: ", newPassword);
 
