@@ -47,8 +47,8 @@ exports.AdminRegistration = [
   async (req, res) => {
     const error = validationResult(req);
 
-    if (!error.array()) {
-      return res.status(400).json({ success: false, message: error.array() });
+    if (!error.isEmpty()) {
+      return res.status(400).json({ success: false, errors: error.array() });
     }
 
     const { firstname, lastname, email, password, confirm_password } = req.body;
@@ -323,12 +323,12 @@ exports.adminnewpassword = [
       .json({ success: true, message: "Admin Password Successfully Changed" });
   },
 ];
-
+ 
 exports.AdminLogOut = async (req, res) => {
   try {
     res.clearCookie("token");
     res
-      .status(200)
+      .status(200) 
       .json({ success: true, message: "Admin Successfully Logout" });
   } catch (error) {
     return res
