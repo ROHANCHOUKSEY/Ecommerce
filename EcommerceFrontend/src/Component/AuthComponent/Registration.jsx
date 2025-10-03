@@ -27,12 +27,12 @@ const Registration = () => {
 
     const handle_SubmitRegistration = async (e) => {
         e.preventDefault();
-        setLoading(true);
+        setLoading(true); 
         try {
             const response = await fetch("http://localhost:3002/user/userRegistration", {
                 method: "POST",
                 credentials: "include",
-                headers: {
+                headers: { 
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ ...userRegistered })
