@@ -1,9 +1,14 @@
-import React, { useState } from 'react'
-import { NavLink } from "react-router-dom";
+import React, { useContext, useState } from 'react'
+import { NavLink, useNavigate } from "react-router-dom";
+import { AdminContext } from '../../Context/AdminContext';
 
 const Navbar = () => {
 
-    const{logoutError, setLogoutError} = useState("");
+    const { logoutError, setLogoutError } = useState("");
+
+    const { setIsLoggined, isLoggined } = useContext(AdminContext);
+
+    const navigate = useNavigate();
 
     const handleAdminLogout = async () => {
         try {
@@ -19,11 +24,13 @@ const Navbar = () => {
                 throw data;
             }
 
+            setIsLoggined(false);
+            navigate("/adminlogin");
             return data;
         } catch (error) {
-            if(error.message){
+            if (error.message) {
                 setLogoutError(error.message);
-            }else{
+            } else {
                 console.log("failed to admin logout: ", error);
             }
         }
@@ -32,7 +39,7 @@ const Navbar = () => {
 
     return (
         <>
-            <div className='w-full h-20 bg-white shadow-lg'>
+            {isLoggined ? (<div className='w-full h-20 bg-white shadow-lg'>
                 <div className='flex justify-between align-middle px-10 items-center h-full'>
                     <div>
                         <h1>Company Logo</h1>
@@ -44,7 +51,19 @@ const Navbar = () => {
                         <NavLink to="/adminregistration"><p onClick={handleAdminLogout}>Logout</p></NavLink>
                     </div>
                 </div>
-            </div>
+            </div>) : (<div className='w-full h-20 bg-white shadow-lg'>
+                <div className='flex justify-between align-middle px-10 items-center h-full'>
+                    <div>
+                        <h1>Company Logo</h1>
+                    </div>
+                    <div>
+                        <h1>user name</h1>
+                    </div>
+                    <div>
+                        <NavLink to="/adminregistration"><p>SignUp</p></NavLink>
+                    </div>
+                </div>
+            </div>)}
         </>
     )
 }

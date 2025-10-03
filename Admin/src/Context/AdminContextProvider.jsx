@@ -1,13 +1,23 @@
-import React, { useState } from 'react'
-import { AdminContext } from './ContextProvider'
+import React, { useEffect, useState } from 'react'
+import { AdminContext } from './AdminContext';
 
-const AdminContextProvider = () => {
+const AdminContextProvider = (props) => {
 
-  const[isLoggined, setIsLoggined] = useState(null);
+  const [isLoggined, setIsLoggined] = useState(() => {
+    const checkLogin = localStorage.getItem("isloggined");
+    return checkLogin ? checkLogin : false
+  });
+
+  console.log("isLoggined: ", isLoggined);
+
+
+  useEffect(() => {
+    localStorage.setItem("isloggined", isLoggined)
+  }, [isLoggined]);
 
   return (
-    <AdminContext.Provider>
-    
+    <AdminContext.Provider value={{ setIsLoggined, isLoggined }}>
+      {props.children}
     </AdminContext.Provider>
   )
 }

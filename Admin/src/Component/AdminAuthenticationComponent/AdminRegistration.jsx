@@ -52,8 +52,19 @@ const AdminRegistration = () => {
                 throw data;
             }
 
-            navigate("/adminlogin");
+            const sendOtp = await fetch("http://localhost:3002/admin/admin_otpsent", {
+                method: "POST",
+                credentials: "include"
+            })
+
+            const otpdata = await sendOtp.json();
+            if (!sendOtp.ok) {
+                throw otpdata;
+            }
+
+            await navigate("/verify");
             return data;
+
         } catch (error) {
             if (error.errors) {
                 setRegistrationError(error.errors.map((err) => err.msg));
