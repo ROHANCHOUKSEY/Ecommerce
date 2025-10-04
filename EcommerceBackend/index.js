@@ -16,15 +16,16 @@ const AdminRouter = require("./Router/AdminRouter/Adminrouter");
 
 app.use(cookieParser());
 app.use(express.json());
-
-app.use(
-  cors({
+ 
+app.use(  
+  cors({ 
     origin: "http://localhost:5173",
+    // origin:"http://localhost:5174",
     credentials: true,
     methods: ["POST", "GET", "DELETE", "PUT"],
   })
 );
-
+ 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.CLOUD_API_KEY,

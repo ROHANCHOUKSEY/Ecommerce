@@ -14,3 +14,4 @@ AdminRouter.post("/admin_passwordchange", AdminRoutes.adminnewpassword);
 AdminRouter.post("/adminLogout", AdminRoutes.AdminLogOut);
  
 module.exports = AdminRouter;
+ 

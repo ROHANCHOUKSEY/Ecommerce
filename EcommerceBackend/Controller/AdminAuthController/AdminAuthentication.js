@@ -41,7 +41,7 @@ exports.AdminRegistration = [
       if (value != req.body.password) {
         throw new Error("Password do not match");
       }
-      return true;
+      return true;  
     }),
 
   async (req, res) => {
