@@ -42,7 +42,7 @@ const AdminLogin = () => {
                 throw data;
             }
 
-            setIsLoggined(true);
+            setIsLoggined("true");
             return data;
         } catch (error) {
             if (error.message) {

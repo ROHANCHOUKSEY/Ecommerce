@@ -12,10 +12,10 @@ const App = () => {
   return (
     <>
       <Navbar />
-      {isLoggined && <div className='flex flex-row'>
+      {isLoggined ? (<div className='flex flex-row'>
         <Sidebar />
-      </div>}
-      <Outlet/>
+      </div>) : (<Outlet/>)}
+      
     </>
   )
 }

@@ -5,11 +5,8 @@ const AdminContextProvider = (props) => {
 
   const [isLoggined, setIsLoggined] = useState(() => {
     const checkLogin = localStorage.getItem("isloggined");
-    return checkLogin ? checkLogin : false
+    return checkLogin === "true"
   });
-
-  console.log("isLoggined: ", isLoggined);
-
 
   useEffect(() => {
     localStorage.setItem("isloggined", isLoggined)
