@@ -15,7 +15,7 @@ const AdminContextProvider = (props) => {
   return (
     <AdminContext.Provider value={{ setIsLoggined, isLoggined }}>
       {props.children}
-    </AdminContext.Provider>
+    </AdminContext.Provider> 
   )
 }
 
